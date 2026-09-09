@@ -210,11 +210,26 @@
   }
 
   /* ------------------------------------------------------------
+     Dev/test helper — visiting the site with ?reset=1 in the URL
+     clears the local "joined" flag with no devtools required, e.g.
+     https://your-site.vercel.app/?reset=1
+     Useful for repeatedly testing the new-visitor flow.
+  ------------------------------------------------------------ */
+  function clearJoinFlagIfRequested() {
+    if (/[?&]reset=1\b/.test(window.location.search)) {
+      try { window.localStorage.removeItem(CONFIG.storageKey); } catch (e) {}
+      var cleanUrl = window.location.pathname + window.location.hash;
+      window.history.replaceState({}, "", cleanUrl);
+    }
+  }
+
+  /* ------------------------------------------------------------
      Boot
   ------------------------------------------------------------ */
   function boot() {
     wireLinks();
     initNav();
+    clearJoinFlagIfRequested();
 
     var record = Store.read();
     var alreadyJoined = !!(record && record.joined);
