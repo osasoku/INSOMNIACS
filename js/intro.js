@@ -11,7 +11,7 @@
 
   var TIMING = reduceMotion
     ? { appear: 1, hold: 250, fade: 1 }
-    : { appear: 260, hold: 620, fade: 780 };
+    : { appear: 260, hold: 1300, fade: 780 };
 
   function run(onComplete) {
     var body = document.body;
