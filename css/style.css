@@ -535,6 +535,7 @@ section{ position: relative; }
   justify-content: center;
   overflow: hidden;
 }
+.final-signal[hidden]{ display: none; } /* the hidden attribute was being overridden by display:flex above — this restores it */
 .final-signal__inner{
   display: flex;
   flex-direction: column;
