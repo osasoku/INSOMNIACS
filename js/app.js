@@ -10,9 +10,9 @@
      CONFIG — edit me
   ------------------------------------------------------------ */
   var CONFIG = {
-    // Social / contact placeholders — swap for the real accounts.
-    instagramUrl: "https://instagram.com/theinsomniacs.lagos", // TODO: confirm real handle
-    contactEmail: "signal@theinsomniacs.placeholder",           // TODO: confirm real inbox
+    // Social / contact — real accounts.
+    instagramUrl: "https://www.instagram.com/insomniacs.ng?stkn=MmpudnVmbHlwNnF1",
+    contactEmail: "helloinsomniacs@gmail.com",
 
     // BACKEND INTEGRATION POINT.
     // Leave null to run the prototype in local-only mode (no
