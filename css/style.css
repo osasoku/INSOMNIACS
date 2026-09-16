@@ -435,6 +435,23 @@ section{ position: relative; }
 }
 
 /* ============================================================
+   BRAND MARK
+============================================================ */
+.brand-mark{
+  padding: var(--sp-6) var(--edge);
+  border-top: var(--hairline);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.brand-mark__image{
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  opacity: 0.92;
+}
+
+/* ============================================================
    WAITLIST
 ============================================================ */
 .waitlist{
