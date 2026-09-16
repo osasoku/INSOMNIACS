@@ -641,6 +641,70 @@ body[data-state="final"] main{ display: none; }
 body[data-state="final"]{ overflow: hidden; height: 100svh; }
 
 /* ============================================================
+   MOTION — scroll reveals, hero entrance, decode sweep
+============================================================ */
+[data-reveal]{
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity var(--dur-slow) var(--ease-out),
+              transform var(--dur-slow) var(--ease-out);
+  transition-delay: calc(var(--reveal-i, 0) * 140ms);
+}
+[data-reveal].is-revealed{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hero content rises into place the instant the intro dissolves —
+   driven by body[data-state], not scroll, since it's already
+   in the viewport at that moment. */
+.hero__title-block, .hero__side{
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity var(--dur-slow) var(--ease-out),
+              transform var(--dur-slow) var(--ease-out);
+}
+body[data-state="app"] .hero__title-block{
+  opacity: 1; transform: translateY(0); transition-delay: 90ms;
+}
+body[data-state="app"] .hero__side{
+  opacity: 1; transform: translateY(0); transition-delay: 260ms;
+}
+
+/* A single light sweep passes across the hero title as it
+   resolves into place — a quiet nod to the "signal" motif. */
+.hero__title{ position: relative; overflow: hidden; }
+.hero__title::after{
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0; left: -30%;
+  width: 22%;
+  background: linear-gradient(100deg, transparent, rgba(236,233,226,0.16), transparent);
+  transform: skewX(-18deg) translateX(0);
+  opacity: 0;
+  pointer-events: none;
+}
+body[data-state="app"] .hero__title::after{
+  animation: hero-sweep 1100ms var(--ease-out) 420ms 1;
+}
+@keyframes hero-sweep{
+  0%{ opacity: 0; transform: skewX(-18deg) translateX(-20%); }
+  15%{ opacity: 1; }
+  70%{ opacity: 0.6; }
+  100%{ opacity: 0; transform: skewX(-18deg) translateX(480%); }
+}
+
+@media (prefers-reduced-motion: reduce){
+  [data-reveal],
+  .hero__title-block, .hero__side{
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .hero__title::after{ animation: none !important; content: none; }
+}
+
+/* ============================================================
    RESPONSIVE
 ============================================================ */
 @media (max-width: 860px){
