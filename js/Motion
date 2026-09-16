@@ -1,0 +1,138 @@
+/* ============================================================
+   Motion
+   Two on-brand motion primitives, kept deliberately restrained:
+
+   1. Scroll reveal — elements marked [data-reveal] rise and
+      fade in the first time they enter the viewport. Siblings
+      inside a [data-reveal-group] stagger automatically.
+
+   2. Scramble / decode — elements marked [data-scramble] resolve
+      from noise characters into their real text, like a signal
+      locking on. Used sparingly: the intro's 03:17, the hero
+      eyebrow, and the "you're in" confirmation heading.
+
+   Both respect prefers-reduced-motion (content simply appears,
+   no animation cost).
+============================================================ */
+(function () {
+  "use strict";
+
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------------- Scroll reveal ---------------- */
+  function initScrollReveal() {
+    var groups = document.querySelectorAll("[data-reveal-group]");
+    groups.forEach(function (group) {
+      var items = group.querySelectorAll(":scope > [data-reveal]");
+      items.forEach(function (item, i) {
+        item.style.setProperty("--reveal-i", i);
+      });
+    });
+
+    var targets = document.querySelectorAll("[data-reveal]");
+
+    if (reduceMotion || !("IntersectionObserver" in window)) {
+      targets.forEach(function (t) { t.classList.add("is-revealed"); });
+      return;
+    }
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-revealed");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2, rootMargin: "0px 0px -8% 0px" });
+
+    targets.forEach(function (t) { observer.observe(t); });
+  }
+
+  /* ---------------- Scramble / decode text ---------------- */
+  var SCRAMBLE_CHARS = "!<>-_/[]{}=+*^#0123456789";
+
+  // Runs once: cycles noise characters, then locks in the real
+  // text left-to-right, like a transmission resolving. Only
+  // designed for plain single-line text (no inner HTML/line breaks).
+  function scramble(el, options) {
+    options = options || {};
+    var finalText = options.text || el.textContent;
+
+    if (reduceMotion) {
+      el.textContent = finalText;
+      return;
+    }
+
+    var duration = options.duration || 600;
+    var len = finalText.length;
+    var totalFrames = Math.max(1, Math.round(duration / 33));
+    var revealStart = Math.floor(totalFrames * 0.3);
+    var frame = 0;
+
+    function tick() {
+      frame++;
+      var revealSpan = Math.max(1, totalFrames - revealStart);
+      var revealCount = Math.floor(
+        (Math.max(0, frame - revealStart) / revealSpan) * len
+      );
+      var out = "";
+      for (var i = 0; i < len; i++) {
+        var ch = finalText[i];
+        if (ch === " " || ch === ":" || ch === "." || ch === "'") {
+          out += ch;
+        } else if (i < revealCount) {
+          out += ch;
+        } else {
+          out += SCRAMBLE_CHARS[(Math.random() * SCRAMBLE_CHARS.length) | 0];
+        }
+      }
+      el.textContent = out;
+
+      if (frame < totalFrames) {
+        requestAnimationFrame(tick);
+      } else {
+        el.textContent = finalText;
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+
+  // Auto-triggers [data-scramble] elements the first time they
+  // scroll into view. (Above-the-fold elements are scrambled
+  // manually by app.js/intro.js at the moment they're revealed,
+  // since they're already inside the viewport before that point.)
+  function initScrambleOnScroll() {
+    var els = document.querySelectorAll("[data-scramble]");
+    if (!els.length) return;
+
+    if (reduceMotion || !("IntersectionObserver" in window)) return;
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          scramble(entry.target);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.4 });
+
+    els.forEach(function (el) { observer.observe(el); });
+  }
+
+  window.Motion = {
+    initScrollReveal: initScrollReveal,
+    initScrambleOnScroll: initScrambleOnScroll,
+    scramble: scramble
+  };
+
+  function boot() {
+    initScrollReveal();
+    initScrambleOnScroll();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot);
+  } else {
+    boot();
+  }
+})();
