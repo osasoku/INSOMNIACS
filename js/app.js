@@ -14,13 +14,13 @@
     instagramUrl: "https://www.instagram.com/insomniacs.ng?stkn=MmpudnVmbHlwNnF1",
     contactEmail: "helloinsomniacs@gmail.com",
 
-    // EMAIL DELIVERY.
-    // No backend and no third-party form service — submissions are
-    // delivered via a mailto: link, pre-filled and opened in the
-    // visitor's own email app. They still need to hit send
-    // themselves; there's no way to silently email you in the
-    // background without a backend or a service like Web3Forms.
-    // Uses contactEmail above as the destination.
+    // WAITLIST STORAGE — Google Sheet (via Apps Script Web App).
+    // Deploy the paired Apps Script as a Web App (see README) and
+    // paste the resulting URL here — it ends in /exec. Every
+    // submission is then appended as a row to that Sheet in Drive,
+    // automatically, the instant someone submits. Leave null to run
+    // in local-only mode (nothing saved anywhere yet).
+    driveEndpoint: "https://script.google.com/macros/s/AKfycbwnYYSeAcTJhN7eJIx6y4jigp91G4OdrTdo0B1f0r2XyjNGz7qPapWMWUc8WacXUlHN/exec",
 
     // How long the "YOU'RE IN / THEY'RE AWAKE" confirmation holds
     // before the site transitions into the final signal state.
@@ -55,28 +55,35 @@
   };
 
   /* ------------------------------------------------------------
-     Email delivery layer
-     Opens a pre-filled mailto: link (to CONFIG.contactEmail) in a
-     new tab, right when the visitor submits. They complete it by
-     hitting send in their own mail app. Runs synchronously inside
-     the submit handler (before any delay) so browsers treat it as
-     a direct result of the click and don't block the popup.
+     Waitlist storage layer
+     Posts straight to the Google Sheet via the Apps Script Web
+     App URL in CONFIG.driveEndpoint — no visitor action needed,
+     no popup, nothing to hit send on. Uses mode: "no-cors" because
+     Apps Script doesn't return CORS headers for POST; that means
+     the response is opaque (we can't read success/failure back),
+     but the request itself reaches the Sheet reliably. Falls back
+     to a local-only simulation if no endpoint is set yet.
   ------------------------------------------------------------ */
   function submitToWaitlist(payload) {
-    var subject = encodeURIComponent("THE INSOMNIACS — new watcher");
-    var body = encodeURIComponent(
-      "First Name: " + payload.firstName + "\n" +
-      "Email: " + payload.email + "\n" +
-      "Phone / WhatsApp: " + (payload.phone || "(not provided)")
-    );
-    var mailtoUrl = "mailto:" + CONFIG.contactEmail + "?subject=" + subject + "&body=" + body;
+    if (!CONFIG.driveEndpoint) {
+      return new Promise(function (resolve) {
+        setTimeout(function () {
+          resolve({ ok: true, local: true });
+        }, 650 + Math.random() * 450);
+      });
+    }
 
-    window.open(mailtoUrl, "_blank");
+    var body = new URLSearchParams();
+    body.append("firstName", payload.firstName);
+    body.append("email", payload.email);
+    body.append("phone", payload.phone || "");
 
-    return new Promise(function (resolve) {
-      setTimeout(function () {
-        resolve({ ok: true, local: true });
-      }, 650 + Math.random() * 450);
+    return fetch(CONFIG.driveEndpoint, {
+      method: "POST",
+      mode: "no-cors",
+      body: body
+    }).then(function () {
+      return { ok: true };
     });
   }
 
