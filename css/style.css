@@ -440,15 +440,22 @@ section{ position: relative; }
 .brand-mark{
   padding: var(--sp-6) var(--edge);
   border-top: var(--hairline);
+  min-height: 85svh;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .brand-mark__image{
-  width: 100%;
-  max-width: 320px;
-  height: auto;
+  width: auto;
+  height: min(72vh, 780px);
+  max-width: 92%;
+  max-height: 100%;
+  object-fit: contain;
   opacity: 0.92;
+}
+@media (max-width: 640px){
+  .brand-mark{ min-height: 70svh; padding: var(--sp-5) var(--edge); }
+  .brand-mark__image{ height: min(58vh, 560px); }
 }
 
 /* ============================================================
