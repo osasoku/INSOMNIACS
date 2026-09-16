@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>THE INSOMNIACS — Chapter 001: First Light · Lagos · Dec 2026</title>
-<meta name="description" content="THE INSOMNIACS. Chapter 001 — First Light. Lagos, December 2026. Join the waitlist.">
+<meta name="description" content="THE INSOMNIACS. Chapter 001 — First Light. Lagos, December 2026. Become a watcher.">
 
 <!-- Open Graph -->
 <meta property="og:title" content="THE INSOMNIACS — 03:17">
@@ -62,7 +62,7 @@
     <ol>
       <li><a href="#top" data-nav-close>001 — INDEX</a></li>
       <li><a href="#dispatch" data-nav-close>002 — DISPATCH</a></li>
-      <li><a href="#waitlist" data-nav-close>003 — WAITLIST</a></li>
+      <li><a href="#waitlist" data-nav-close>003 — WATCHERS</a></li>
       <li><a href="#signal-follow" data-nav-close>004 — SIGNAL</a></li>
     </ol>
   </nav>
@@ -76,14 +76,9 @@
 
   <!-- ============================= HERO ============================= -->
   <section class="hero" id="top">
-    <div class="hero__meta hero__meta--top">
-      <span class="mono">CH. 001</span>
-      <span class="mono">LAGOS · DEC 2026</span>
-    </div>
-
     <div class="hero__grid">
       <div class="hero__title-block">
-        <p class="mono hero__eyebrow">SIGNAL LOGGED AT 03:17</p>
+        <p class="mono hero__eyebrow" id="hero-eyebrow">SIGNAL LOGGED AT 03:17</p>
         <h1 class="hero__title">
           <span class="hero__title-line">STAY</span>
           <span class="hero__title-line hero__title-line--outline">AWAKE.</span>
@@ -98,7 +93,7 @@
         </p>
         <p class="mono hero__location">LAGOS · DEC 2026</p>
         <a href="#waitlist" class="btn btn--primary" id="hero-cta">
-          <span>[ JOIN THE WAITLIST ]</span>
+          <span>[ BECOME A WATCHER ]</span>
         </a>
       </div>
     </div>
@@ -112,50 +107,11 @@
   <!-- ============================= DISPATCH / EDITORIAL ============================= -->
   <section class="dispatch" id="dispatch">
 
-    <article class="editorial-block editorial-block--01">
-      <div class="editorial-block__image" role="img" aria-label="Placeholder — editorial photography slot 01: Lagos at night, monochrome, cinematic.">
-        <span class="editorial-block__image-label mono">IMAGE SLOT — 01<br>LAGOS / NIGHT / MONO</span>
-      </div>
-      <div class="editorial-block__text">
-        <p class="mono editorial-block__tag">// 001</p>
-        <p class="editorial-block__statement">
-          THEY'RE AWAKE.
-        </p>
-        <p class="editorial-block__body">
-          Something has been moving under Lagos after dark. A frequency.
-          A room. A crowd that doesn't sleep. THE INSOMNIACS is the first
-          record of it.
-        </p>
-      </div>
-    </article>
-
-    <article class="editorial-block editorial-block--02 editorial-block--reverse">
-      <div class="editorial-block__text">
-        <p class="mono editorial-block__tag">// 002</p>
-        <p class="editorial-block__statement editorial-block__statement--red">
-          FIRST LIGHT.
-        </p>
-        <p class="editorial-block__body">
-          Chapter 001 begins in December. Location, lineup and access
-          details are not public yet — they are being released to the
-          waitlist first, in order.
-        </p>
-        <p class="mono editorial-block__note">
-          VENUE — <span class="placeholder">TO BE ANNOUNCED</span><br>
-          DATE — <span class="placeholder">TO BE ANNOUNCED</span><br>
-          ACCESS — <span class="placeholder">WAITLIST ONLY</span>
-        </p>
-      </div>
-      <div class="editorial-block__image" role="img" aria-label="Placeholder — editorial photography slot 02: anonymous silhouette, high contrast.">
-        <span class="editorial-block__image-label mono">IMAGE SLOT — 02<br>SILHOUETTE / HIGH CONTRAST</span>
-      </div>
-    </article>
-
-    <article class="editorial-block editorial-block--03">
-      <div class="editorial-block__image editorial-block__image--wide" role="img" aria-label="Placeholder — editorial photography slot 03: wide cinematic frame, industrial space.">
+    <article class="editorial-block editorial-block--03" data-reveal-group>
+      <div class="editorial-block__image editorial-block__image--wide" role="img" aria-label="Placeholder — editorial photography slot 03: wide cinematic frame, industrial space." data-reveal>
         <span class="editorial-block__image-label mono">IMAGE SLOT — 03<br>INDUSTRIAL / WIDE FRAME</span>
       </div>
-      <div class="editorial-block__text editorial-block__text--center">
+      <div class="editorial-block__text editorial-block__text--center" data-reveal>
         <p class="editorial-block__statement editorial-block__statement--lg">
           YOU HAVEN'T<br>BEEN TOLD<br>EVERYTHING.
         </p>
@@ -170,10 +126,10 @@
 
       <!-- FORM STATE -->
       <div class="waitlist__panel" id="waitlist-form-panel" data-panel="form">
-        <p class="mono waitlist__eyebrow">003 — ACCESS</p>
+        <p class="mono waitlist__eyebrow">003 — WATCHERS</p>
         <h2 class="waitlist__title">STAY AWAKE.</h2>
         <p class="waitlist__copy">
-          Join the list for first access to Chapter 001 — First Light.
+          Become a watcher for first access to Chapter 001 — First Light.
         </p>
 
         <form id="waitlist-form" class="waitlist-form" novalidate>
@@ -195,7 +151,7 @@
           <div class="field__error" id="form-error" role="alert" aria-live="assertive"></div>
 
           <button type="submit" class="btn btn--primary btn--block" id="waitlist-submit">
-            <span class="btn__label">[ ENTER THE LIST ]</span>
+            <span class="btn__label">[ BECOME A WATCHER ]</span>
             <span class="btn__loading" aria-hidden="true">SENDING…</span>
           </button>
 
@@ -207,7 +163,7 @@
 
       <!-- CONFIRMATION STATE -->
       <div class="waitlist__panel waitlist__panel--confirm" id="waitlist-confirm-panel" data-panel="confirm" hidden>
-        <p class="confirm__you-re-in" tabindex="-1">YOU'RE IN.</p>
+        <p class="confirm__you-re-in" id="confirm-heading" tabindex="-1">YOU'RE IN.</p>
         <p class="confirm__signal mono">03:17</p>
         <p class="confirm__line">THEY'RE AWAKE.</p>
         <p class="confirm__sub mono">We'll tell you what's next.</p>
@@ -264,6 +220,7 @@
 
 <script src="js/grain.js"></script>
 <script src="js/glitch.js"></script>
+<script src="js/motion.js"></script>
 <script src="js/intro.js"></script>
 <script src="js/app.js"></script>
 </body>
