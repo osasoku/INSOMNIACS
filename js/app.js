@@ -14,13 +14,13 @@
     instagramUrl: "https://www.instagram.com/insomniacs.ng?stkn=MmpudnVmbHlwNnF1",
     contactEmail: "helloinsomniacs@gmail.com",
 
-    // BACKEND INTEGRATION POINT.
-    // Leave null to run the prototype in local-only mode (no
-    // network call — the frontend clearly does not claim the
-    // submission reached a server). Set this to a real endpoint
-    // URL once a waitlist backend exists, e.g.
-    // "https://api.theinsomniacs.com/v1/waitlist".
-    waitlistEndpoint: null,
+    // EMAIL DELIVERY.
+    // No backend and no third-party form service — submissions are
+    // delivered via a mailto: link, pre-filled and opened in the
+    // visitor's own email app. They still need to hit send
+    // themselves; there's no way to silently email you in the
+    // background without a backend or a service like Web3Forms.
+    // Uses contactEmail above as the destination.
 
     // How long the "YOU'RE IN / THEY'RE AWAKE" confirmation holds
     // before the site transitions into the final signal state.
@@ -55,23 +55,24 @@
   };
 
   /* ------------------------------------------------------------
-     Backend integration layer
-     Swap the body of this function for a real fetch() once
-     CONFIG.waitlistEndpoint is set. The rest of the app only
-     depends on the returned Promise resolving/rejecting.
+     Email delivery layer
+     Opens a pre-filled mailto: link (to CONFIG.contactEmail) in a
+     new tab, right when the visitor submits. They complete it by
+     hitting send in their own mail app. Runs synchronously inside
+     the submit handler (before any delay) so browsers treat it as
+     a direct result of the click and don't block the popup.
   ------------------------------------------------------------ */
   function submitToWaitlist(payload) {
-    if (CONFIG.waitlistEndpoint) {
-      return fetch(CONFIG.waitlistEndpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      }).then(function (res) {
-        if (!res.ok) throw new Error("Waitlist submission failed");
-        return res.json().catch(function () { return { ok: true }; });
-      });
-    }
-    // Local-only simulation — no real request is made.
+    var subject = encodeURIComponent("THE INSOMNIACS — new watcher");
+    var body = encodeURIComponent(
+      "First Name: " + payload.firstName + "\n" +
+      "Email: " + payload.email + "\n" +
+      "Phone / WhatsApp: " + (payload.phone || "(not provided)")
+    );
+    var mailtoUrl = "mailto:" + CONFIG.contactEmail + "?subject=" + subject + "&body=" + body;
+
+    window.open(mailtoUrl, "_blank");
+
     return new Promise(function (resolve) {
       setTimeout(function () {
         resolve({ ok: true, local: true });
