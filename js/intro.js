@@ -22,6 +22,10 @@
     requestAnimationFrame(function () {
       requestAnimationFrame(function () {
         body.setAttribute("data-intro", "signal");
+        var timeEl = intro.querySelector(".intro__time");
+        if (timeEl && window.Motion) {
+          window.Motion.scramble(timeEl, { text: "03:17", duration: 480 });
+        }
       });
     });
 
