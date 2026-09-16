@@ -181,7 +181,11 @@
 
           formPanel.hidden = true;
           confirmPanel.hidden = false;
-          confirmPanel.querySelector(".confirm__you-re-in").focus();
+          var confirmHeading = confirmPanel.querySelector(".confirm__you-re-in");
+          confirmHeading.focus();
+          if (window.Motion) {
+            window.Motion.scramble(confirmHeading, { text: "YOU'RE IN.", duration: 550 });
+          }
           if (srStatus) srStatus.textContent = "You're in. They're awake. We'll tell you what's next.";
 
           setTimeout(function () {
@@ -243,6 +247,10 @@
         enterFinalState();
       } else {
         document.body.setAttribute("data-state", "app");
+        var eyebrow = document.getElementById("hero-eyebrow");
+        if (eyebrow && window.Motion) {
+          window.Motion.scramble(eyebrow, { text: "SIGNAL LOGGED AT 03:17", duration: 700 });
+        }
       }
     });
   }
